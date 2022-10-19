@@ -2,29 +2,39 @@ package main
 
 import (
 	"fmt"
-	"sort"
 )
 
-// TODO: Implement better answer, try to remove the sort method, we can do this keeping track of the minimun and max value  on response.
+// O(n) time | O(n) space
 func SortedSquaredArray(array []int) []int {
-	var response []int
-	left, right := 0, len(array)-1
+	sortedArray := make([]int, len(array))
 
-	for left <= right {
-		if left == right {
-			response = append(response, array[left]*array[left])
-			break
+	minIndex, maxIndex := 0, len(array)-1
+
+	for index := len(array) - 1; index >= 0; index-- {
+		minValue := array[minIndex]
+		maxValue := array[maxIndex]
+
+		if abs(minValue) > abs(maxValue) {
+			sortedArray[index] = minValue * minValue
+			minIndex += 1
 		}
 
-		response = append(response, array[left]*array[left])
-		response = append(response, array[right]*array[right])
-
-		left++
-		right--
+		if abs(minValue) <= abs(maxValue) {
+			sortedArray[index] = maxValue * maxValue
+			maxIndex -= 1
+		}
 	}
 
-	sort.Ints(response)
-	return response
+	return sortedArray
+}
+
+// Helper function to deal with negative values.
+func abs(number int) int {
+	if number < 0 {
+		return -number
+	}
+
+	return number
 }
 
 func main() {
