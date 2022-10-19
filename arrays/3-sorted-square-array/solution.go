@@ -5,10 +5,22 @@ import (
 	"sort"
 )
 
+// TODO: Implement better answer, try to remove the sort method, we can do this keeping track of the minimun and max value  on response.
 func SortedSquaredArray(array []int) []int {
 	var response []int
-	for _, number := range array {
-		response = append(response, number*number)
+	left, right := 0, len(array)-1
+
+	for left <= right {
+		if left == right {
+			response = append(response, array[left]*array[left])
+			break
+		}
+
+		response = append(response, array[left]*array[left])
+		response = append(response, array[right]*array[right])
+
+		left++
+		right--
 	}
 
 	sort.Ints(response)
