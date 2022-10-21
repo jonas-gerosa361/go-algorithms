@@ -16,13 +16,11 @@ func TournamentWinner(competitions [][]string, results []int) string {
 	}
 
 	var maxPoints int
+	fmt.Println(teams)
 	for team, points := range teams {
 		if points > maxPoints {
-			maxPoints = points
-		}
-
-		if points <= maxPoints {
 			winner = team
+			maxPoints = points
 		}
 	}
 
