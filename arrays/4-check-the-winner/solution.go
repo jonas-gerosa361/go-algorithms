@@ -2,29 +2,34 @@ package main
 
 import "fmt"
 
+const HOME_TEAM_WON = 1
+
+// O(n) time | O(k) space - n number of competitions and k number of teams
 func TournamentWinner(competitions [][]string, results []int) string {
-	var winner string
-	teams := make(map[string]int)
+	currentBestTeam := ""
+	scores := map[string]int{currentBestTeam: 0}
 
-	for index, result := range results {
-		if result == 0 {
-			result = 1
-		} else if result == 1 {
-			result = 0
+	for index, competition := range competitions {
+		result := results[index]
+		homeTeam, awayTeam := competition[0], competition[1]
+
+		winningTeam := awayTeam
+		if result == HOME_TEAM_WON {
+			winningTeam = homeTeam
 		}
-		teams[competitions[index][result]] += 3
-	}
 
-	var maxPoints int
-	fmt.Println(teams)
-	for team, points := range teams {
-		if points > maxPoints {
-			winner = team
-			maxPoints = points
+		updateSocres(winningTeam, 3, scores)
+
+		if scores[winningTeam] > scores[currentBestTeam] {
+			currentBestTeam = winningTeam
 		}
 	}
 
-	return winner
+	return currentBestTeam
+}
+
+func updateSocres(team string, points int, scores map[string]int) {
+	scores[team] += points
 }
 
 func main() {
