@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"sort"
 )
 
+// O(nlog(n) & nlog(m))time | O(1)space
 func SmallestDifference(array1, array2 []int) []int {
 	// Start sorting both arrays
 	sort.Ints(array1)
@@ -12,26 +14,29 @@ func SmallestDifference(array1, array2 []int) []int {
 
 	response := []int{}
 	leftPointer, rightPointer := 0, 0
-	minFound := false
+	smallest, current := math.MaxInt32, math.MaxInt32
 
-	minChange := 0
-	for minFound != true {
-		currentChange := array1[leftPointer] - array2[rightPointer]
-		fmt.Println(currentChange)
-		if currentChange < 0 {
-			minChange = currentChange
-			response = []int{array1[leftPointer], array2[rightPointer]}
+	for leftPointer < len(array1) && rightPointer < len(array2) {
+		leftValue, rightValue := array1[leftPointer], array2[rightPointer]
+
+		if rightValue == leftValue {
+			return []int{leftValue, rightValue}
 		}
 
-		if array1[leftPointer] < array2[rightPointer] && leftPointer < len(array1)-1 {
+		if leftValue < rightValue {
+			current = rightValue - leftValue
 			leftPointer++
 		}
 
-		if array1[leftPointer] > array2[rightPointer] && rightPointer < len(array2)-1 {
+		if rightValue < leftValue {
+			current = leftValue - rightValue
 			rightPointer++
 		}
 
-		fmt.Println(minChange)
+		if smallest > current {
+			smallest = current
+			response = []int{leftValue, rightValue}
+		}
 	}
 
 	return response
